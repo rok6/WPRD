@@ -1,44 +1,22 @@
 <?php
+require_once(dirname(__FILE__) . '/wprd_Settings.php');
+require_once(dirname(__FILE__) . '/wprd_Editor.php');
+// require_once(dirname(__FILE__) . '/wprd_Navigation.php');
+// require_once(dirname(__FILE__) . '/wprd_CustomPost.php');
+// require_once(dirname(__FILE__) . '/wprd_CMB2.php');
+// require_once(dirname(__FILE__) . '/wprd_Options.php');
+// require_once(dirname(__FILE__) . '/wprd_Taxonomy.php');
 
 class WPRD
 {
+	static private $domain;
 
-	public static function on_support()
+	public function __construct( $domain = 'WPRD' )
 	{
-		//HTML5でのマークアップの許可
-		add_theme_support('html5', [
-			'search-form',
-			'comment-form',
-			'comment-list',
-			'gallery',
-			'caption'
-		]);
+		self::$domain = $domain;
 
-		// wp_head() でのタイトルタグ出力の有効化
-		add_theme_support('title-tag');
-
-		//投稿・コメントのRSSフィードリンクの有効化
-		add_theme_support('automatic-feed-links');
+		$this->settings = new WPRD_Settings( $domain );
+		$this->editor = new WPRD_Editor( $domain );
 	}
 
-	public function set_load_theme_textdomain(　$domain, $folder = 'languages' )
-	{
-		load_theme_textdomain($domain, get_template_directory() . '/' . $folder);
-	}
-
-	public function add_admin_style( $css_path = 'admin-style.css' )
-	{
-		add_action('admin_enqueue_scripts', function() use($css_path) {
-			wp_enqueue_style( 'my_admin_style', get_template_directory_uri().$css_path );
-		});
-	}
-
-	public function remove_auto_redirect() {
-		add_filter( 'redirect_canonical', function($redirect_url) {
-			if( is_404() ) {
-				return false;
-			}
-			return $redirect_url;
-		});
-	}
 }
