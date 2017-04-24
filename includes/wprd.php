@@ -1,11 +1,10 @@
 <?php
 require_once(dirname(__FILE__) . '/wprd_Settings.php');
 require_once(dirname(__FILE__) . '/wprd_Editor.php');
-// require_once(dirname(__FILE__) . '/wprd_Navigation.php');
-// require_once(dirname(__FILE__) . '/wprd_CustomPost.php');
-// require_once(dirname(__FILE__) . '/wprd_CMB2.php');
-// require_once(dirname(__FILE__) . '/wprd_Options.php');
-// require_once(dirname(__FILE__) . '/wprd_Taxonomy.php');
+require_once(dirname(__FILE__) . '/wprd_CustomPost.php');
+require_once(dirname(__FILE__) . '/wprd_CustomField.php');
+require_once(dirname(__FILE__) . '/wprd_Navigation.php');
+require_once(dirname(__FILE__) . '/wprd_Options.php');
 
 class WPRD
 {
@@ -17,6 +16,10 @@ class WPRD
 
 		$this->settings = new WPRD_Settings( $domain );
 		$this->editor = new WPRD_Editor( $domain );
+		$this->cpost = new WPRD_CustomPost( $domain );
+		$this->cfield = new WPRD_CustomField( $domain );
+		$this->nav = new WPRD_Navigation( $domain );
+		$this->options = new WPRD_Options( $domain );
 	}
 
 }

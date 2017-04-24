@@ -1,0 +1,119 @@
+// main: ./style.less
+@import url('//fonts.googleapis.com/css?family=Roboto:300,400,500,700');
+//@import url('modules/fonts/font-NotoSans.less');
+@import url('modules/fonts/font-YuGothic.less');
+
+/*=====================================================*
+ * initialize
+ *=====================================================*/
+
+li {
+	list-style: none;
+}
+.defs {
+	display: none;
+}
+::-webkit-scrollbar {
+	width: 10px;
+}
+::-webkit-scrollbar-thumb {
+	background: #777;
+}
+::-webkit-scrollbar-track {
+	background: #fff;
+}
+
+/*=====================================================*
+ * snippet
+ *=====================================================*/
+
+.container {
+	max-width: 1200px;
+	padding: 5em 2.5em 2.5em;
+	margin: auto;
+}
+
+/*=====================================================*
+ * Structure
+ *=====================================================*/
+html{
+	font-size: 62.5%;
+	font-weight: normal;
+}
+body {
+	font-size: 1.5em;
+	line-height: 1.5;
+	font-family: -apple-system, BlinkMacSystemFont, 'Roboto', 'Yu Gothic', YuGothic, Verdana, Meiryo, sans-serif;
+	// font-family: -apple-system, BlinkMacSystemFont, 'Roboto', 'Noto Sans Japanese', Verdana, Meiryo, sans-serif;
+}
+
+#wrapper {
+
+}
+
+#header {
+
+}
+
+#main {
+
+}
+
+
+#footer {
+	.copyright {
+		text-align: center;
+		padding: .5em 0;
+	}
+}
+
+
+#blanding {
+	position: relative;
+	display: flex;
+	min-height: 100vh;
+	justify-content: space-between;
+	align-items: center;
+	overflow-x: hidden;
+
+	.title {
+		position: absolute;
+		left: 50%;
+		z-index: 1;
+		margin-left: -13.5vw;
+		margin-top: -0.5em;
+
+		h1 {
+			font-size: 6vw;
+		}
+	}
+
+	[class*="web-"] {
+		position: relative;
+		width: 25vw; height: 25vw;
+		h2 {
+			text-align: center;
+			position: absolute;
+			font-size: 2.4vw;
+			a {
+				display: block;
+				color: #fff;
+			}
+		}
+	}
+
+	.web-service {
+		background: #ddd;
+		transform: translateX(-12.5vw) rotate(45deg);
+		h2 {
+			transform: rotate(-45deg) translate(5vw, 10.2vw);
+		}
+	}
+	.web-recruit {
+		background: #D1496B;
+		transform: translateX(12.5vw) rotate(45deg);
+		h2 {
+			transform: rotate(-45deg) translate(-7vw, 9.7vw);
+		}
+	}
+}

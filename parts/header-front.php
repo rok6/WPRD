@@ -14,15 +14,37 @@
 
 <div id="wrapper">
 
+
+
 <header id="header">
-	<div class="container">
-		<div class="title h-items">
-			<?=Helper::logo(true)?>
+
+	<div id="blanding">
+
+		<div class="title">
+			<?=Helper::logo(false)?>
 		</div>
-		<nav class="nav-container h-items">
+
+		<section class="web-service">
+			<h2><a href="#">
+				WEBサイト<br />
+				制作・相談
+			</a></h2>
+		</section>
+
+		<section class="web-recruit">
+			<h2><a href="#">
+				リクルート<br />
+				サイトの<br />
+				可能性。
+			</a></h2>
+		</section>
+	</div>
+
+	<div class="container">
+		<nav class="nav-container">
 			<?=Helper::navgation_menu(['location' => 'primary'])?>
 		</nav>
-		<div class="search h-items">
+		<div class="search">
 			<?php get_search_form(); ?>
 		</div>
 	</div>

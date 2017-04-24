@@ -7,14 +7,13 @@
 // true にして管理画面に入ると下記「初期設定」以下の内容に強制的に書き換えます。
 // true のままだと管理画面内では該当箇所の設定を変更できません。
 // 変更後は必ず false に直して下さい。
-$enable_default_options = false;
+$initialize_default_options = false;
 
 
 // 投稿サムネイルの有効化
 add_theme_support('post-thumbnails', ['post',]);
 // 画像のサイズ規格を追加
 add_image_size('featured-image', 2000, 1500, true);
-
 
 /**=====================================================
  *	ラベル・名称関係
@@ -29,36 +28,36 @@ add_filter('post_type_labels_post', function($labels) {
 });
 
 // タイトルからのキャッチフレーズの除去
-add_filter( 'document_title_parts', function( $title ) {
+add_filter( 'document_title_parts', function($title) {
 	if( isset($title['tagline']) ) {
 		unset( $title['tagline'] );
 	}
 	return $title;
 });
 // タイトルのセパレータ
-add_filter( 'document_title_separator', function( $separator ) {
+add_filter( 'document_title_separator', function($separator) {
 	return $separator = '|';
 });
 
 // パスワード保護ページのタイトル接頭語
-add_filter('protected_title_format', function( $title ) {
+add_filter('protected_title_format', function($title) {
 	return '閲覧制限:%s';
 });
 
 /**=====================================================
  *	初期設定
  *=====================================================*/
-if( $enable_default_options ) {
+if( $initialize_default_options ) {
 	/**
 	 *	画像関連
 	 */
 	// 各画像サイズの設定
 	set_option('large_size_w', 1280); // default: 1024
-	set_option('large_size_h', 1280); // default: 1024
+	set_option('large_size_h', 0); // default: 1024
 	set_option('medium_large_size_w', 960); // default: 768
 	set_option('medium_large_size_h', 0); // default: 0
 	set_option('medium_size_w', 640); // default: 300
-	set_option('medium_size_h', 640); // default: 300
+	set_option('medium_size_h', 0); // default: 300
 	set_option('thumbnail_size_w', 150); // default: 150
 	set_option('thumbnail_size_h', 150); // default: 150
 	// サムネイル画像を規定サイズに縮小した時、はみ出した分を切り取るか

@@ -14,10 +14,7 @@ class Helper
 			)
 		: get_bloginfo('name');
 
-		return sprintf(
-			'<h1>%1$s</h1>' . PHP_EOL,
-			(string)$title
-		);
+		return '<h1>'. (string)$title .'</h1>' . PHP_EOL;
 	}
 
 	/**
@@ -88,20 +85,16 @@ class Helper
 			$label = get_search_query();
 		}
 
+		else if( is_home() || is_single() ){
+			$label = get_queried_object()->post_title;
+		}
+
+		else if( is_category() || is_tag() || is_tax() ) {
+			$label = get_queried_object()->slug;
+		}
+
 		else {
-
-			if( is_home() || is_single() ){
-				$label = get_queried_object()->post_title;
-			}
-
-			else if( is_category() || is_tag() || is_tax() ) {
-				$label = get_queried_object()->slug;
-			}
-
-			else {
-				$label = get_queried_object()->label;
-			}
-
+			$label = get_queried_object()->label;
 		}
 
 		return esc_html($label);
@@ -187,7 +180,7 @@ class Helper
 	static public function navgation_menu( array $args = [] )
 	{
 		$default = [
-			'menu'			=> '',
+			'menu'		=> '',
 			'location'	=> '',
 		];
 		$args += $default;
@@ -208,16 +201,16 @@ class Helper
 
 		foreach( $navs as $nav ) {
 			$m = [];
-			$m['ID']					= $nav->ID;
-			$m['title']				= $nav->title;
+			$m['ID']			= $nav->ID;
+			$m['title']			= $nav->title;
 			$m['attr_title'] 	= $nav->attr_title;
 			$m['description']	= $nav->description;
-			$m['url']					= $nav->url;
-			$m['target']			= $nav->target;
-			$m['xfn']					= $nav->xfn;
-			$m['classes']			= array_values(array_diff($nav->classes, ['']));
-			$m['parent_id'] = (int)$nav->menu_item_parent;
-			$m['has_parent'] = ( !$m['parent_id'] ) ? false : true;
+			$m['url']			= $nav->url;
+			$m['target']		= $nav->target;
+			$m['xfn']			= $nav->xfn;
+			$m['classes']		= array_values(array_diff($nav->classes, ['']));
+			$m['parent_id']		= (int)$nav->menu_item_parent;
+			$m['has_parent']	= !$m['parent_id'] ? false : true;
 
 			$menus[] = $m;
 		}
@@ -226,7 +219,7 @@ class Helper
 
 		return self::_render([
 			'<ul>',
-			$walker->get_element(),
+			$walker->output,
 			'</ul>',
 		], 3);
 
@@ -280,12 +273,12 @@ class Helper
 	 *=====================================================*/
 	static public function datetime( $id )
 	{
-		$entry_date					= '';
-		$format							= get_option('date_format');
-		$published					= get_the_date($format, $id);
+		$entry_date			= '';
+		$format				= get_option('date_format');
+		$published			= get_the_date($format, $id);
 		$published_datetime = get_the_date(DATE_W3C, $id);
-		$updated						= get_post_modified_time($format, false, $id);
-		$updated_datetime		= get_post_modified_time(DATE_W3C, false, $id);
+		$updated			= get_post_modified_time($format, false, $id);
+		$updated_datetime	= get_post_modified_time(DATE_W3C, false, $id);
 
 		if( is_single() ) {
 			$entry_date .= sprintf(
@@ -327,7 +320,7 @@ class Helper
 	 *=====================================================*/
 	static public function taxonomies( $id )
 	{
-		$taxonomy		= get_object_taxonomies(get_post_type($id));
+		$taxonomy	= get_object_taxonomies(get_post_type($id));
 		$taxonomies	= wp_get_object_terms($id, $taxonomy);
 
 		$terms = [];
@@ -335,30 +328,43 @@ class Helper
 		if( !empty($taxonomies) && !is_wp_error($taxonomies) ) {
 
 			$history = [];
+			$terms_hierarchical = [];
 
 			foreach( $taxonomies as $term ) {
 
 				$tax = get_taxonomy($term->taxonomy);
 				$name = $tax->name;
+				$label = $item = null;
+
+				$_ith = is_taxonomy_hierarchical($term->taxonomy);
 
 				if( !in_array($name, $history) ) {
 					$history[] = $name;
-					$terms[$name] = [];
-					array_unshift($terms[$name],
-						sprintf('<span class="name%2$s">%1$s</span>',
-							esc_html( $tax->label ),
-							esc_attr(' ' . $name)
-						)
+					$label = sprintf('<span class="name%2$s">%1$s</span>',
+						esc_html( $tax->label ),
+						esc_attr(' ' . $name)
 					);
 				}
-
-				$terms[$name][] = sprintf('<a href="%2$s" class="term">%1$s</a>',
+				$item = sprintf('<a href="%2$s" class="term">%1$s</a>',
 					esc_html( $term->name ),
 					esc_url( get_tag_link($term->term_id) )
 				);
 
-			}
+				if( $_ith ) {
+					if( !empty($label) ) {
+						$terms_hierarchical[] = $label;
+					}
+					$terms_hierarchical[] = $item;
+				}
+				else {
+					if( !empty($label) ) {
+						$terms[] = $label;
+					}
+					$terms[] = $item;
+				}
 
+			}
+			$terms = array_merge($terms_hierarchical, $terms);
 		}
 		else {
 			$terms[] = '<span class="no-taxonomy"></span>';
@@ -372,10 +378,10 @@ class Helper
 	 *=====================================================*/
 	static public function post_paginations()
 	{
-		global $max_num_pages;
+		global $wp_query;
 
 		$range	= 2;
-		$max	= $max_num_pages;
+		$max	= $wp_query->max_num_pages;
 		$current = get_query_var('paged') ? : 1;
 
 		if( is_front_page() || $max <= 1) {

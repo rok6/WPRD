@@ -33,60 +33,16 @@ require_once(WPRD_MDLS_PATH . '/controller/Controller.php');
 add_action('after_setup_theme', function () {
 	require_once dirname(__FILE__) . '/includes/wprd.php';
 	require_once dirname(__FILE__) . '/includes/wprd_Functions.php';
-	require_once dirname(__FILE__) . '/includes/wprd_Helper.php';
-	require_once dirname(__FILE__) . '/config.php';
-
-	$wprd = new WPRD( 'WPRD' );
-
-	// Editor CSS へのパス
-	add_editor_style( '/assets/css/editor-style.css' );
-	// 管理画面用CSSの追加
-	$wprd->settings->add_admin_style('/includes/admin/css/admin-style.css');
-	$wprd->settings->set_load_theme_textdomain();
-	$wprd->settings->on_support();
-	$wprd->settings->remove_wp_admin_logo();
-	$wprd->settings->reorder_admin_menu();
-	$wprd->settings->clean_wp_head([
-		'wp_generator',
-		'wp_shortlink_wp_head',
-		//'feed_links',
-		//'feed_links_extra',
-		/* EditURI */
-		'rsd_link',
-		/* wlwmanifest */
-		'wlwmanifest_link',
-		/* page-links */
-		'index_rel_link',
-		'parent_post_rel_link',
-		'start_post_rel_link',
-		'adjacent_posts_rel_link_wp_head',
-		/* oEmbed */
-		//'rest_output_link_wp_head',
-		'wp_oembed_add_discovery_links',
-		'wp_oembed_add_host_js',
-		/* emoji */
-		'print_emoji_detection_script',
-		'print_emoji_styles',
-		/* inline-style */
-		'recent_comments_style',
-	]);
-
-	// 日本語スラッグの禁止
-	$wprd->settings->on_post_auto_slug();
-	// リダイレクト時の推測候補先への遷移を禁止
-	$wprd->settings->remove_auto_redirect();
-
-	// メール設定
-	add_filter('wp_mail_from', function($email) {
-		// 送信側メールアドレス
-		return 'wordpress@example.com';
-	});
-	add_filter('wp_mail_from_name', function($email_name) {
-		// 送信者名
-		return $email_name;
-	});
-
-
-	$wprd->editor->on_buttons_visual_editor();
-	$wprd->editor->on_buttons_text_editor();
+	require_once dirname(__FILE__) . '/includes/Helper.php';
 }, 0);
+
+
+
+/**
+ * 子テーマで下記と同等の優先順位（9999）の after_setup_theme を記述した場合、
+ * 以下の記述は無視され、子テーマの after_setup_theme が優先されます。
+ */
+add_action('after_setup_theme', function () {
+	require_once dirname(__FILE__) . '/config-base.php';
+	require_once dirname(__FILE__) . '/config.php';
+}, 9999);
