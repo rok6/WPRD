@@ -112,3 +112,5 @@ $wprd->nav->init([
 	'primary'		=> __('メインメニュー'),
 	'social'		=> __('ソーシャル'),
 ]);
+
+$wprd->options->init();

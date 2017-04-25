@@ -4,72 +4,23 @@ class WPRD_Options
 {
 	static private $domain;
 
-	private $roles = [
-		'administrator',
-		'editor',
-		'author',
-		'contributor',
-		'subscriber',
-	];
-
 	public function __construct( $domain )
 	{
 		self::$domain = $domain;
-
-		//特権管理者　マルチサイト全般
-		//管理者　シングルサイト全般
-		// administrator
-		//編集者　投稿に関する権限のみ
-		// editor
-		//投稿者　自身の投稿管理のみ
-		// author
-		//寄稿者　投稿のみ、許可町
-		// contributor
-		//購読者　閲覧のみ
-		// subscriber
-
-		$user = wp_get_current_user();
-
-		switch($user->roles[0]) {
-			case 'administrator':
-				break;
-			case 'editor':
-				break;
-			case 'author':
-				break;
-			case 'contributor':
-				break;
-			case 'subscriber':
-				break;
-		}
 	}
 
 	public function init()
 	{
 		if( is_admin() ) {
+			add_action('admin_init', [$this, 'register_settings']);
 			add_action('admin_menu', [$this, 'set_menu_options']);
 		}
 	}
 
-	public function register_settings()
-	{
-		register_setting('site_settings', 'blogname');
-		register_setting('site_settings', 'blogdescription');
-		register_setting('site_settings', 'admin_email');
-		register_setting('site_settings', 'twitter');
-		register_setting('site_settings', 'facebook');
-		register_setting('site_settings', 'posts_per_page');
-		register_setting('site_settings', 'posts_per_rss');
-		register_setting('site_settings', 'rss_use_excerpt');
-		register_setting('site_settings', 'blog_public');
-	}
-
 	public function set_menu_options()
 	{
-		//$this->reset_wp_options_general();
-
 		$options_group = 'site_settings';
-		$role = 'administrator';
+		$role = 'editor';
 
 		add_menu_page(
 			__( 'サイト設定', self::$domain ),
@@ -80,52 +31,119 @@ class WPRD_Options
 			'dashicons-admin-settings',
 			80
 		);
-		add_submenu_page(
-			$options_group,
-			__( '一般設定', self::$domain ),
-			__( '一般設定', self::$domain ),
-			$role,
-			$options_group,
-			[$this, 'require_options']
-		);
-		add_submenu_page(
-			$options_group,
-			__( 'メディア', self::$domain ),
-			__( 'メディア', self::$domain ),
-			$role,
-			$options_group . '-media',
-			[$this, 'require_options']
-		);
+		// add_submenu_page(
+		// 	$options_group,
+		// 	__( 'サブ設定', self::$domain ),
+		// 	__( 'サブ設定', self::$domain ),
+		// 	$role,
+		// 	$options_group,
+		// 	[$this, 'require_options']
+		// );
 
-		add_action('admin_init', array( $this, 'register_settings' ));
 	}
 
 	public function require_options()
 	{
-		require_once(TEMPLATEPATH . '/modules/setting/options.php');
+		include(TEMPLATEPATH . '/includes/settings/options.php');
 	}
 
-	private function reset_wp_options_general()
+	public function add_settings_field( $id, $title, array $args = [] )
 	{
-		//options-general.php, options-writing.php, options-reading.php, options-discussion.php, options-media.php, options-permalink.php
-		remove_submenu_page('options-general.php', 'options-general.php');
-		remove_submenu_page('options-general.php', 'options-writing.php');
-		remove_submenu_page('options-general.php', 'options-reading.php');
-		remove_submenu_page('options-general.php', 'options-discussion.php');
-		remove_submenu_page('options-general.php', 'options-media.php');
-		remove_submenu_page('options-general.php', 'options-permalink.php');
-
-		remove_menu_page('options-general.php');
-
-		add_menu_page(
-			__( 'その他の設定', self::$domain ),
-			__( 'その他の設定', self::$domain ),
-			'administrator',
-			'options-general.php',
-			'',
-			null,
-			81
+		return add_settings_field($id, __($title),
+			[$this, 'setting_callbacks'],
+			'site_settings',
+			'default',
+			$args += ['id' => $id, 'title' => $title, 'label_for' => $id]
 		);
 	}
+
+	public function setting_callbacks( $args )
+	{
+		$f = '_callback_'.$args['id'];
+		if( method_exists($this, $f) ) {
+			$this->$f($args['id'], $args);
+		}
+		register_setting('site_settings', $args['id']);
+	}
+
+	public function register_settings()
+	{
+		$this->add_settings_field( 'blogname',			'Site Title' );
+		$this->add_settings_field( 'blogdescription',	'Tagline' );
+		$this->add_settings_field( 'admin_email',		'Email Address' );
+		$this->add_settings_field( 'posts_per_page',	'Blog pages show at most' );
+		$this->add_settings_field( 'posts_per_rss',		'Syndication feeds show the most recent' );
+		$this->add_settings_field( 'rss_use_excerpt',	'For each article in a feed, show' );
+		$this->add_settings_field( 'blog_public',		'Search Engine Visibility' );
+	}
+
+
+	/**=====================================================
+	 *	CALLBACKS
+	 *=====================================================*/
+	private function _callback_blogname( $id, $args )
+	{
+		echo '<input name="'.$id.'" type="text" id="'.$id.'" value="'. esc_attr( get_option($id) ) .'" class="regular-text" />';
+	}
+	private function _callback_blogdescription( $id, $args )
+	{
+		echo '<input name="'.$id.'" type="text" id="'.$id.'" aria-describedby="tagline-description" value="'. esc_attr( get_option($id) ) .'" class="regular-text" />',
+			 '<p class="description" id="tagline-description">' . __('In a few words, explain what this site is about.') . '</p>';
+	}
+	private function _callback_admin_email( $id, $args )
+	{
+		echo '<input name="'.$id.'" type="email" id="'.$id.'" aria-describedby="admin-email-description" value="'. esc_attr( get_option($id) ) .'" class="regular-text ltr" />',
+ 			 '<p class="description" id="admin-email-description">' . __('This address is used for admin purposes, like new user notification.') . '</p>';
+	}
+	private function _callback_posts_per_page( $id, $args )
+	{
+		echo '<input name="'.$id.'" type="number" step="1" min="1" id="'.$id.'" value="'. esc_attr( get_option($id) ) .'" class="small-text" /> ', __('posts');
+	}
+	private function _callback_posts_per_rss( $id, $args )
+	{
+		echo '<input name="'.$id.'" type="number" step="1" min="1" id="'.$id.'" value="'. esc_attr( get_option($id) ) .'" class="small-text" /> ', __('items');
+	}
+
+	private function _callback_rss_use_excerpt( $id, $args )
+	{
+		echo '<fieldset>',
+			 '<legend class="screen-reader-text"><span>'. __('For each article in a feed, show') .'</span></legend>',
+			 '<p>',
+				'<label><input name="'.$id.'" type="radio" value="0" '. checked(0, get_option($id), false) .' /> '. __('Full text') .'</label><br />',
+				'<label><input name="'.$id.'" type="radio" value="1" '. checked(1, get_option($id), false) .' /> '. __('Summary') .'</label>',
+			 '</p>',
+			 '</fieldset>';
+	}
+	private function _callback_blog_public( $id, $args )
+	{
+		echo '<fieldset>',
+			 	'<legend class="screen-reader-text"><span>'. ( has_action( 'blog_privacy_selector' ) ? __( 'Site Visibility' ) : __( 'Search Engine Visibility' ) ) .'</span></legend>';
+
+			if( has_action( 'blog_privacy_selector' ) ) {
+
+				echo '<input id="blog-public" type="radio" name="'.$id.'" value="1" '. checked('1', get_option($id), false) .' />',
+					 '<label for="blog-public">'. __('Allow search engines to index this site') .'</label><br />',
+					 '<input id="blog-norobots" type="radio" name="'.$id.'" value="0" '. checked('0', get_option($id), false) .' />',
+	 				 '<label for="blog-norobots">'. __('Discourage search engines from indexing this site') .'</label>',
+					 '<p class="description">',
+	 				 	__('Note: Neither of these options blocks access to your site &mdash; it is up to search engines to honor your request.'),
+	 				 '</p>';
+
+				do_action( 'blog_privacy_selector' );
+			}
+			else {
+
+				echo '<label for="blog_public">',
+						'<input name="blog_public" type="checkbox" id="blog_public" value="0" '. checked( '0', get_option($id), false ) .' />',
+						__( 'Discourage search engines from indexing this site' ),
+					 '</label>',
+					 '<p class="description">',
+					 	__('It is up to search engines to honor this request.'),
+					 '</p>';
+			}
+		echo '</fieldset>';
+
+	}
+
 
 }

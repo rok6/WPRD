@@ -1,4 +1,5 @@
 <?php
+require_once(dirname(__FILE__) . '/wprd_Roles.php');
 require_once(dirname(__FILE__) . '/wprd_Settings.php');
 require_once(dirname(__FILE__) . '/wprd_Editor.php');
 require_once(dirname(__FILE__) . '/wprd_CustomPost.php');
@@ -13,6 +14,9 @@ class WPRD
 	public function __construct( $domain = 'WPRD' )
 	{
 		self::$domain = $domain;
+
+		$role = new WPRD_Roles( $domain );
+		$role->setup();
 
 		$this->settings = new WPRD_Settings( $domain );
 		$this->editor = new WPRD_Editor( $domain );
