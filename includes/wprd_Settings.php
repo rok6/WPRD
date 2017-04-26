@@ -23,11 +23,23 @@ class WPRD_Settings
 		});
 	}
 
-	public function add_admin_script( $js_path = 'admin.js' )
+	public function add_admin_script( $js_path = 'admin.js', array $allowed_hook = [] )
 	{
-		add_action('admin_enqueue_scripts', function() use($js_path) {
-			wp_enqueue_script( 'my_admin_scripts', get_template_directory_uri().$js_path, false, null, true );
+		add_action('admin_enqueue_scripts', function($hook) use($js_path, $allowed_hook) {
+			if( self::valid_hook($hook, $allowed_hook) ) {
+				wp_enqueue_script( 'my_admin_scripts', get_template_directory_uri().$js_path, false, null, true );
+			}
 		});
+	}
+
+	public static function valid_hook( $hook, array $allowed = [] )
+	{
+		$hook = (string)$hook;
+
+		if( empty($allowed) ) {
+			return true;
+		}
+		return in_array($hook, $allowed);
 	}
 
 	public static function on_support()

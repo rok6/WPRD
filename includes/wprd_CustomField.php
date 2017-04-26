@@ -86,7 +86,7 @@ class WPRD_CustomField
 				/* admin columns */
 				$this->add_column_fields([
 					'meta_description'	=> __('Meta Description', self::$domain),
-					'meta_robots'				=> __('Meta Robots', self::$domain),
+					'meta_robots'		=> __('Meta Robots', self::$domain),
 				]);
 			});
 

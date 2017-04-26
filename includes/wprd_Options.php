@@ -20,12 +20,12 @@ class WPRD_Options
 	public function set_menu_options()
 	{
 		$options_group = 'site_settings';
-		$role = 'editor';
+		$allowed_role_id = 'editor';
 
 		add_menu_page(
 			__( 'サイト設定', self::$domain ),
 			__( 'サイト設定', self::$domain ),
-			$role,
+			$allowed_role_id,
 			$options_group,
 			[$this, 'require_options'],
 			'dashicons-admin-settings',
@@ -35,7 +35,7 @@ class WPRD_Options
 		// 	$options_group,
 		// 	__( 'サブ設定', self::$domain ),
 		// 	__( 'サブ設定', self::$domain ),
-		// 	$role,
+		// 	$allowed_role_id,
 		// 	$options_group,
 		// 	[$this, 'require_options']
 		// );

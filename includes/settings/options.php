@@ -11,9 +11,10 @@
 
 <table class="form-table">
 
-	<?php do_settings_fields('site_settings', 'default'); ?>
-
 	<?php do_settings_sections('site_settings'); ?>
+
+		<?php do_settings_fields('site_settings', 'default'); ?>
+
 
 </table>
 

@@ -14,7 +14,7 @@ add_editor_style( '/assets/css/editor-style.css' );
 $wprd->settings->add_admin_style('/includes/admin/css/admin-style.css');
 
 // 管理画面用 JS の追加
-$wprd->settings->add_admin_script('/includes/admin/js/admin_edit.js');
+$wprd->settings->add_admin_script('/includes/admin/js/admin_edit.js', ['edit.php']);
 
 // 言語フォルダを読み込むフォルダ名を指定
 $wprd->settings->set_load_theme_textdomain('languages');
@@ -43,22 +43,28 @@ $wprd->settings->clean_wp_head([
 	'wp_shortlink_wp_head',
 	//'feed_links',
 	//'feed_links_extra',
+
 	/* EditURI */
 	'rsd_link',
+
 	/* wlwmanifest */
 	'wlwmanifest_link',
+
 	/* page-links */
 	'index_rel_link',
 	'parent_post_rel_link',
 	'start_post_rel_link',
 	'adjacent_posts_rel_link_wp_head',
+
 	/* oEmbed */
 	//'rest_output_link_wp_head',
 	'wp_oembed_add_discovery_links',
 	'wp_oembed_add_host_js',
+
 	/* emoji */
 	'print_emoji_detection_script',
 	'print_emoji_styles',
+
 	/* inline-style */
 	'recent_comments_style',
 ]);

@@ -11,14 +11,15 @@ class WPRD_Roles
 
 	public function setup()
 	{
+		// 管理者に下位権限を付与
 		add_action( 'init', function() {
-			$users = [
-				'administrator',
-				'editor',
-				'author',
-				'contributor',
-				'subscriber',
-			];
+			// $users = [
+			// 	'administrator',
+			// 	'editor',
+			// 	'author',
+			// 	'contributor',
+			// 	'subscriber',
+			// ];
 			$roles = new WP_Roles();
 			foreach( ['administrator'] as $role_id ) {
 				$role = $roles->get_role($role_id);

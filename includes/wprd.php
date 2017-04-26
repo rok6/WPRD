@@ -24,6 +24,7 @@ class WPRD
 		$this->cfield = new WPRD_CustomField( $domain );
 		$this->nav = new WPRD_Navigation( $domain );
 		$this->options = new WPRD_Options( $domain );
+		
 	}
 
 }
