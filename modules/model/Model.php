@@ -23,7 +23,7 @@ class Model
 
 	public function get( array $args = [] ) {
 		if( is_single() ) {
-			return get_post($args);
+			return get_post();
 		}
 		return get_posts($args += $this->default);
 	}
