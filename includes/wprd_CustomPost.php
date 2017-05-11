@@ -29,16 +29,22 @@ class WPRD_CustomPost
 	private function news()
 	{
 		$custompost_args = [
-			'label'					=> 'NEWS',
-			'public'				=> true,
-			'has_archive'		=> true,
+			'label'			=> 'NEWS',
+			'public'		=> true,
+			'has_archive'	=> true,
 			'show_in_rest'	=> true,
 			'menu_position' => 5,
+			'supports'		=> [
+				'title',
+				'editor',
+				'page-attributes',
+				'thumbnail',
+			],
 		];
 		register_post_type('news', $custompost_args);
 		$tax_args = [
-			'label'					=> __('NEWSカテゴリ', self::$domain),
-			'public'				=> true,
+			'label'			=> __('NEWSカテゴリ', self::$domain),
+			'public'		=> true,
 			'hierarchical'	=> true,
 			'show_in_rest'	=> true,
 			'show_admin_column'	=> true,
@@ -53,14 +59,17 @@ class WPRD_CustomPost
 	private function wordpress()
 	{
 		$custompost_args = [
-			'label'					=> __('WordPress', self::$domain),
-			'public'				=> true,
-			'has_archive'		=> true,
+			'label'			=> __('WordPress', self::$domain),
+			'public'		=> true,
+			'has_archive'	=> true,
 			'hierarchical'	=> true,
 			'show_in_rest'	=> true,
 			'menu_position'	=> 5,
-			'support'				=> [
+			'supports'				=> [
+				'title',
+				'editor',
 				'page-attributes',
+				'thumbnail',
 			],
 		];
 		register_post_type('wordpress', $custompost_args);

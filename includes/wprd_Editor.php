@@ -35,6 +35,7 @@ class WPRD_Editor
 			$mceInit['toolbar2'] = 'undo,redo,removeformat,bullist,numlist,dlist-dl,dlist-dt,dlist-dd,blockquote,cite,attention,del,ins,alignleft,aligncenter,alignright';
 			$mceInit['toolbar3'] = 'indent,outdent,hr,pre,wp_code,codesample,wp_more,wp_page,charmap,pastetext,code,wp_help';
 			$mceInit['block_formats'] = "段落=p; 見出し2=h2; 見出し3=h3; 見出し4=h4; 見出し5=h5;";
+			// $mceInit['indent'] = true;
 			// iframe の追加
 			//$mceInit[ 'extended_valid_elements' ] .= "iframe[id|class|title|style|align|frameborder|height|longdesc|marginheight|marginwidth|name|scrolling|src|width]";
 			return $mceInit;

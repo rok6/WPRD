@@ -8,7 +8,7 @@
 <?php wp_head(); ?>
 <?=Helper::robots()?>
 <link rel="profile" href="http://gmpg.org/xfn/11">
-<link rel='stylesheet' media='all' href='<?=get_template_directory_uri()?>/assets/css/style.css' />
+<link rel='stylesheet' media='all' href='<?=get_stylesheet_directory_uri()?>/assets/css/style.css' />
 </head>
 <body>
 
@@ -16,17 +16,15 @@
 
 <header id="header">
 	<div class="container">
-		<div class="title h-items">
+		<div class="title">
 			<?=Helper::logo(true)?>
 		</div>
-		<nav class="nav-container h-items">
+		<nav class="nav-container">
 			<?=Helper::navgation_menu(['location' => 'primary'])?>
 		</nav>
-		<div class="search h-items">
+		<div class="search">
 			<?php get_search_form(); ?>
 		</div>
 	</div>
-	<div class="breadcrumb" itemscope itemtype="http://schema.org/BreadcrumbList">
-		<?=Helper::breadcrumb()?>
-	</div>
+	<?=Helper::breadcrumb()?>
 </header>

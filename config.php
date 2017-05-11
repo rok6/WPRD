@@ -11,7 +11,7 @@ $initialize_default_options = false;
 
 
 // 投稿サムネイルの有効化
-add_theme_support('post-thumbnails', ['post',]);
+add_theme_support('post-thumbnails', ['post','news']);
 // 画像のサイズ規格を追加
 add_image_size('featured-image', 2000, 1500, true);
 
