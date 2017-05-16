@@ -32,7 +32,7 @@ trait Helper_Common
 		echo PHP_EOL;
 		foreach( $array_elements as $element ) {
 			if( is_array($element) ) {
-				self::render($element, $indent + 1);
+				self::_render($element, $indent + 1);
 				continue;
 			}
 			else {

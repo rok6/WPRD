@@ -18,8 +18,7 @@ class Controller
 	{
 		global $wp_query;
 
-		$this->post_type = ( (string)$post_type !== '' && $post_type !== 'default' ) ?
-							$post_type : $this->get_post_type();
+		$this->post_type = ( (string) $post_type !== '' && $post_type !== 'default' ) ? $post_type : '';
 
 		if( !is_search() ) {
 			$this->params['post_type'] = $this->post_type;
@@ -28,9 +27,7 @@ class Controller
 		// 投稿件数の取得
 		$this->view_vars['found_posts'] = $wp_query->found_posts;
 		// 投稿件数が0の時
-		if( !$this->view_vars['found_posts'] ) {
-			$render_type = 'none';
-		}
+		$render_type = ( $this->view_vars['found_posts'] ) ? $render_type : 'none';
 
 		// モデルクラスのロード
 		$this->model = $this->load_model($this->post_type);
