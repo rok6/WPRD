@@ -74,12 +74,12 @@ class WPRD_Settings
 
 
 	public function remove_auto_redirect() {
-		add_filter( 'redirect_canonical', function($redirect_url) {
+		add_filter( 'redirect_canonical', function($redirect_url, $requested_url) {
 			if( is_404() ) {
 				return false;
 			}
 			return $redirect_url;
-		});
+		}, 10, 2);
 	}
 
 
