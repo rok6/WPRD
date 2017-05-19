@@ -2,7 +2,7 @@
 
 <main id="main" role="main">
 
-	<?php component('post', 'list'); ?>
+	<?php component('list', 'post'); ?>
 
 </main><!--#main-->
 

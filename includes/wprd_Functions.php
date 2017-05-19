@@ -63,7 +63,7 @@ function set_option( $key, $value, $add = false )
  * @param strign $name
  * @param string $render_type
  */
-function component( $post_type = false, $render_type = false )
+function component( $render_type = false, $post_type = false )
 {
 	return request_module('controller', $post_type, $render_type );
 }
@@ -79,7 +79,7 @@ function component( $post_type = false, $render_type = false )
 function request_module( $module_type, $post_type = false, $render_type = false )
 {
 	$namespace	= 'WPRD\\module\\';
-	$post_type	= (string)$post_type;
+	$post_type	= (string) $post_type;
 	$module_path = WPRD_MDLS_PATH . '/'. $module_type .'/';
 
 	// ファイル名のパスカライズ

@@ -2,7 +2,7 @@
 
 <main id="main" role="main">
 
-	<?php component('search', 'list'); ?>
+	<?php component('list'); ?>
 
 </main><!--#main-->
 
